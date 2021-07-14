@@ -6,7 +6,7 @@ spec:
   storageClassName: manual
   capacity:
     storage: 200Mi
-    accessModes:
+  accessModes:
     - ReadWriteMany
-    hostPath:
+  hostPath:
     path: "/pv1"
