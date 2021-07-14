@@ -10,3 +10,5 @@ spec:
     storage: 200Mi
     accessModes:
     - ReadWriteMany
+    hostPath:
+    path: "/pv1"
