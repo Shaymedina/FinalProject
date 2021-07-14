@@ -82,4 +82,30 @@ Verify that the container in the Pod is running:
 ~~~
 kubectl get pod redis-storage-shay
 ~~~
-
+11.Create this pod and attached it a persistent volume called pv-1.
+- Make sure the PV mountPath is hostbase : /data
+(Code-Before PV-1)
+~~~
+apiVersion: v1
+kind: Pod
+metadata:
+creationTimestamp: null
+labels:
+run: use-pv
+name: use-pvspec-yourname
+containers:
+- image: nginx
+name: use-pv
+resources: {}
+dnsPolicy: ClusterFirst
+restartPolicy: Always
+status: {}
+~~~
+Create the Pod:
+~~~
+kubectl apply -f 9-pv1.yml
+~~~
+Verify that the container in the Pod is running:
+~~~
+kubectl get pod use-pvspec-shay
+~~~
