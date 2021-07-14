@@ -8,7 +8,8 @@ metadata:
 spec:
   volumes:
     - name: pv-1
-      emptyDir: {} 
+      persistentVolumeClaim:
+        claimName: pvc
   containers:
   - image: nginx
     name: use-pv
