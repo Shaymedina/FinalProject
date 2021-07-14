@@ -43,8 +43,22 @@ Create a static pod named static-busybox on the msater node that uses the busybo
 ~~~
 kubectl apply -f 5-staticpod.yml
 ~~~
-kubectl apply -f 01-configmap.yaml
+8.Create a pod in the finance-yourname namespace named temp-bus with the image redis:alpine
+- Name: temp-bus
+- Image Name: redis:alpine
+First of all we need to create a namespace:
 ~~~
+kubectl create namespace finance-shay
+~~~
+Now we will create the pod in yaml format:
+~~~
+kubectl apply -f 6-podnamespace.yml
+~~~
+Verify that the pod exist:
+~~~
+kubectl get pods --namespace=finance-shay
+~~~
+9.
 
 # bla
 bla
