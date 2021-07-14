@@ -6,9 +6,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
+      app: hr-web-app
   template:
     metadata:
       labels:
+      app: hr-web-app
     spec:
       containers:
       - name: app
