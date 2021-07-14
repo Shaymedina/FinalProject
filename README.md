@@ -25,7 +25,11 @@ kubectl get nodes -o=jsonpath='{.items[0].metadata.name}' > /tmp/nodes-shay/node
 - Type: Cluster-ip
 - Use the right labels
 ~~~
-kubectl aplly -f 2-service.yml
+kubectl apply -f 3-service.yml
+~~~
+Or:
+~~~
+kubectl create service clusterip messaging-service --tcp=6379
 ~~~
 6.Create a deployment named hr-web-app using image kodekloud/webapp-color with 2 replicas.
 - Name: hr-web-app
