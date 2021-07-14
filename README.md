@@ -58,18 +58,17 @@ Verify that the pod exist:
 ~~~
 kubectl get pods --namespace=finance-shay
 ~~~
-9.
-
-# bla
-bla
+9.Create a Persistent Volume with the given specification:
+- Volume Name: pv-analytics
+- Storage: 100Mi
+- Access modes: ReadWriteMany
+- Host Path: /pv/data-analytics
+PV creation:
 ~~~
-kubectl apply -f 03-configmap-alerts.yaml
+kubectl apply -f 7-persistentvolume
 ~~~
-
-# bla
-bla
+View Information:
 ~~~
-kubectl apply -f 04-statefulset.yaml
+kubectl get pv pv-analytics
 ~~~
-
-
+10.
