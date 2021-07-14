@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: messaging
+ labels:
+  tier: msg
+spec:
+ containers:
+ - name: messaging
+   image: redis:alpine
+
