@@ -7,7 +7,7 @@ metadata:
   name: use-pvspec-shay
 spec:
   volumes:
-    - name: pv-analytics
+    - name: pv-1
       persistentVolumeClaim:
         claimName: pvc
   containers:
@@ -15,7 +15,7 @@ spec:
     name: use-pv
     volumeMounts:
         - mountPath: "/data/"
-          name: pv-analytics
+          name: pv-1
     resources: {}
   dnsPolicy: ClusterFirst
   restartPolicy: Always

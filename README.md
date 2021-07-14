@@ -103,7 +103,15 @@ status: {}
 ~~~
 Create PVC:
 ~~~
-kubectl apply -f 9-pv1.yml
+kubectl apply -f 9-pvc.yml
+~~~
+Create PV-1:
+~~~
+kubectl apply -f 11-pv-1.yml
+~~~
+Create Pod:
+~~~
+kubectl apply -f 10-storage3.yml
 ~~~
 Verify that the container in the Pod is running and uses the PVC:
 ~~~
