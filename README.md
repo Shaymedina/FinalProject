@@ -101,11 +101,11 @@ dnsPolicy: ClusterFirst
 restartPolicy: Always
 status: {}
 ~~~
-Create the Pod:
+Create PVC:
 ~~~
 kubectl apply -f 9-pv1.yml
 ~~~
-Verify that the container in the Pod is running:
+Verify that the container in the Pod is running and uses the PVC:
 ~~~
 kubectl get pod use-pvspec-shay
 ~~~
