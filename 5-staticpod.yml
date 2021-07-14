@@ -7,9 +7,9 @@ spec:
   - name: static-busybox
     image: busybox
     command:
-        - sleep
+        - "sleep"
         - "1000"
 
 
 
-        
+
