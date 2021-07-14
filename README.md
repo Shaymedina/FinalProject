@@ -36,11 +36,12 @@ kubectl create service clusterip messaging-service --tcp=6379
 - Image: kodekloud.webapp-color
 - Replicas: 2
 ~~~
-bla
+kubectl apply -f 4-deployment-hr.yml
 ~~~
 7.
-# bla
-blaa
+Create a static pod named static-busybox on the msater node that uses the busybox image and the command sleep 1000
+~~~
+kubectl apply -f 5-staticpod.yml
 ~~~
 kubectl apply -f 01-configmap.yaml
 ~~~
