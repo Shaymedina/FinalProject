@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
       - name: hr
-        image: nkodekloud/webapp-color
+        image: kodekloud/webapp-color
