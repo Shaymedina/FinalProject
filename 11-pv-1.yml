@@ -2,8 +2,6 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: pv-1
-  labels:
-    type: local
 spec:
   storageClassName: manual
   capacity:
