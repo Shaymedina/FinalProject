@@ -71,4 +71,7 @@ View Information:
 ~~~
 kubectl get pv pv-analytics
 ~~~
-10.
+10.Create a Pod called redis-storage-yourname with image: redis:alpine with a Volume of type emptyDir that lasts for the life of the Pod:
+- Pod named 'redis-storage-yourname'
+- Pod 'redis-storage-yourname' uses Volume type of emptyDir
+- Pod 'redis-storage-yourname' uses volumeMount with mountPath = /data/redis

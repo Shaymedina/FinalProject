@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-storage-shay
+spec:
+  volumes:
+    - name: redis-storage-pv
+      emptyDir: {}
+  containers:
+    - name: redis-storage-shay
+      image: redis:alpine
+      volumeMounts:
+        - mountPath: "/data/redis"
+          name: redis-storage-pv
+
+
