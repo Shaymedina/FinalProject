@@ -6,6 +6,10 @@ spec:
   containers:
   - name: static-busybox
     image: busybox
-    command: ["/bin/sh"]
-    args: ["sleep 1000"]
-    
+    command:
+        - sleep
+        - "1000"
+
+
+
+        
