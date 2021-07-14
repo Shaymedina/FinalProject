@@ -38,8 +38,7 @@ kubectl create service clusterip messaging-service --tcp=6379
 ~~~
 kubectl apply -f 4-deployment-hr.yml
 ~~~
-7.
-Create a static pod named static-busybox on the msater node that uses the busybox image and the command sleep 1000
+7.Create a static pod named static-busybox on the msater node that uses the busybox image and the command sleep 1000
 ~~~
 kubectl apply -f 5-staticpod.yml
 ~~~
@@ -75,3 +74,12 @@ kubectl get pv pv-analytics
 - Pod named 'redis-storage-yourname'
 - Pod 'redis-storage-yourname' uses Volume type of emptyDir
 - Pod 'redis-storage-yourname' uses volumeMount with mountPath = /data/redis
+Create the Pod:
+~~~
+kubectl apply -f 8-storage.yml
+~~~
+Verify that the container in the Pod is running:
+~~~
+kubectl get pod redis-storage-shay
+~~~
+
