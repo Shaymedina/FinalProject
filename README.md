@@ -53,15 +53,15 @@ kubectl apply -f 5-staticpod.yml
 Create a pod in the finance-yourname namespace named temp-bus with the image redis:alpine
 - Name: temp-bus
 - Image Name: redis:alpine
-First of all we need to create a namespace:
+1. First of all we need to create a namespace:
 ~~~
 kubectl create namespace finance-shay
 ~~~
-Now we will create the pod in yaml format:
+2. Now we will create the pod in yaml format:
 ~~~
 kubectl apply -f 6-podnamespace.yml
 ~~~
-Verify that the pod exist:
+3. Verify that the pod exist:
 ~~~
 kubectl get pods --namespace=finance-shay
 ~~~
@@ -71,11 +71,11 @@ Create a Persistent Volume with the given specification:
 - Storage: 100Mi
 - Access modes: ReadWriteMany
 - Host Path: /pv/data-analytics
-PV creation:
+1. PV creation:
 ~~~
 kubectl apply -f 7-persistentvolume
 ~~~
-View Information:
+2. View Information:
 ~~~
 kubectl get pv pv-analytics
 ~~~
@@ -84,18 +84,18 @@ Create a Pod called redis-storage-yourname with image: redis:alpine with a Volum
 - Pod named 'redis-storage-yourname'
 - Pod 'redis-storage-yourname' uses Volume type of emptyDir
 - Pod 'redis-storage-yourname' uses volumeMount with mountPath = /data/redis
-Create the Pod:
+1. Create the Pod:
 ~~~
 kubectl apply -f 8-storage.yml
 ~~~
-Verify that the container in the Pod is running:
+2. Verify that the container in the Pod is running:
 ~~~
 kubectl get pod redis-storage-shay
 ~~~
 # 11
 Create this pod and attached it a persistent volume called pv-1.
 - Make sure the PV mountPath is hostbase : /data
-(Code-Before PV-1)
+\(Code-Before PV-1)
 ~~~
 apiVersion: v1
 kind: Pod
@@ -112,19 +112,19 @@ dnsPolicy: ClusterFirst
 restartPolicy: Always
 status: {}
 ~~~
-Create PVC:
+1. Create PVC:
 ~~~
 kubectl apply -f 9-pvc.yml
 ~~~
-Create PV-1:
+2. Create PV-1:
 ~~~
 kubectl apply -f 11-pv-1.yml
 ~~~
-Create Pod:
+3. Create Pod:
 ~~~
 kubectl apply -f 10-storage3.yml
 ~~~
-Verify that the container in the Pod is running and uses the PVC:
+4. Verify that the container in the Pod is running and uses the PVC:
 ~~~
 kubectl get pod use-pvspec-shay
 ~~~
