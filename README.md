@@ -95,7 +95,7 @@ kubectl get pod redis-storage-shay
 # 11
 Create this pod and attached it a persistent volume called pv-1.
 - Make sure the PV mountPath is hostbase : /data
-\(Code-Before PV-1)
+##### Code-Before PV-1:
 ~~~
 apiVersion: v1
 kind: Pod
