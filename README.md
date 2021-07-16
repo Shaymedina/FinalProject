@@ -242,6 +242,14 @@ i. container 1:
 ii. name: alpha
 iii. Container 2:
 iv. name: beta
+1. Create multi-pod with 2 containers:
+~~~
+kubectl apply -f 12-multipod.yml
+~~~
+2. Verify the pod:
+~~~
+kubectl describe pod/multi-pod
+~~~
 
 
 
