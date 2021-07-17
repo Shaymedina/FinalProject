@@ -581,3 +581,152 @@ wrong with the deployment:
 - update the deployment with the image version latest and check the history
 and verify nothing is going on
 
+~~~
+kubectl set image deploy/webapp nginx=nginx:1.100 #Get error.
+kubectl get pods (ImagePullErr)
+~~~
+Undo the deploy and back to previous version:
+~~~
+kubectl rollout undo deploy/webapp
+kubectl get pods
+kubectl describe pods/webapp-b7889ff56-hxssb
+~~~
+
+Check the history of the specific revision of that deployment: (Revision=3 in our case)
+~~~
+kubectl rollout history deploy/webapp --revision=3 
+~~~
+
+Update the deployment with the image version latest and check the history
+and verify nothing is going on: (Everything ok)
+~~~
+kubectl set image deploy/webapp nginx=nginx:latest --record
+kubectl rollout history deploy/webapp
+kubectl describe pods/webapp-6b9d4c7497-jv7k7
+~~~
+
+11. Apply the autoscaling to this deployment with minimum 10 and maximum 20 replicas
+and target CPU of 85% and verify hpa is created and replicas are increased to 10
+from 1
+
+~~~
+kubectl autoscale deploy/webapp --min=10 --max=20 --cpu-percent=85
+kubectl describe hpa
+kubectl describe deploy/webapp
+~~~
+
+12. Clean the cluster by deleting deployment and hpa you just created:
+~~~
+kubectl delete deploy/webapp
+kubectl delete hpa/webapp
+~~~
+
+13. Create a job and make it run 10 times one after one (run > exit > run >exit ..) using the following configuration:
+~~~
+kubectl create job hello-job --image=busybox --dry-run -o yaml -- echo "Hello I am from job" > hello-job.yaml
+~~~
+- Add to the above job completions: 10 inside the yaml.
+
+First, Lets run the command above:
+~~~
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: hello-job
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - echo
+        - Hello I am from job
+        image: busybox
+        name: hello-job
+        resources: {}
+      restartPolicy: Never
+status: {}
+~~~
+
+Now we will add the completions: 10:
+~~~
+spec:
+  completions: 10
+~~~
+
+Create the Job:
+~~~
+kubectl apply -f hello-job.yaml
+~~~
+Verify:
+~~~
+kubectl get job -watch
+~~~
+
+# Config Map:
+- Create a file called config.txt with two values key1=value1 and key2=value2 and
+verify the file:
+##### key1=value1
+##### key2=value2
+
+~~~
+vim config.txt
+~~~
+Add the keys:
+~~~
+key1=value1
+key2=value2
+~~~
+Verify:
+~~~
+cat config.txt
+~~~
+- Create a configmap named keyvalcfgmap and read data from the file config.txt and
+verify that configmap is created correctly:
+
+~~~
+kubectl create configmap keyvalcfgmap --from-file=config.txt
+~~~
+
+- Create an nginx pod and load environment values from the above configmap
+keyvalcfgmap and exec into the pod and verify the environment variables and delete
+the pod.
+- first run this command to save the pod yml
+~~~
+
+
+~~~
+ We running the commad above and got yaml format:
+
+ ~~~
+ apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+~~~
+ 
+We will set configmap in the yaml file:
+
+~~~
+envFrom:
+- configMapRef:
+    name: keyvalcfgmap
+~~~
+
+Updating the pod config:
+~~~
+kubectl apply -f nginx-shay-test.yml
+~~~
