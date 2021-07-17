@@ -250,6 +250,334 @@ kubectl apply -f 12-multipod.yml
 ~~~
 kubectl describe pod/multi-pod
 ~~~
+# Pod Design Questions:
+1. Understand how to use Labels, Selectors and Annotations:
+Label its a way to tag a pod or any resource in the kubernetes system, Example: im created pod with 5 containers, I want that three of them expose out, so i give them a label and expose the label name only, After that the "labeled" containers exposes out. Labels its like group.
+Selector are Same as Labels but with Selectors we can attached pod to specific node.
+Annotations are provide a extra information to metadata like image information, tool info', release ID.
+2. Understand Deployments and how to perform rolling updates
+Deployment its a way to deploy pods, replicas, rolling updates. Deployment controller changes the desires state to the actual one. In Addition, we can use Deployment to rollback updates, scale up pods, cleanup replicas and more.
+We perform rolling updates by command:
+~~~
+kubectl set image deployment/nginx-deployment nginx=nginx:1.14 --record
+~~~
+3. Understand Deployments and how to perform rollbacks
+We using rollback when the Deployment not stable or crash, we do it with the command:
+~~~
+kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.13 --record=true
+~~~
+In addition we can decide to rolling back to previous version by simple command:
+~~~
+kubectl rollout undo deployment.v1.apps/nginx-deployment
+~~~
+the output will be:
+~~~
+deployment.apps/nginx-deployment rolled back
+~~~
+4. Understand Jobs and CronJobs
+Job its a way to create a pod with spesific mission, The job will not stop execution until the pod will terminate.
+CronJob are the same thing but with schedule option to specific time.
+How to create a CronJob?  we can perform CronJob with yaml and command. Example's:
+~~~
+kubectl create cronjob NAME --image=image --schedule='0/5 * * * ?' -- echo "Hello World"
+~~~
+Yaml Format: (add .spec)
+~~~
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+~~~
 
+Full code:
+~~~
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster
+          restartPolicy: OnFailure
+~~~
 
+Verify and geting status about the cronjob we created:
+~~~
+kubectl get cronjob hello
+~~~
+
+5. Type the command for: Get pods with label information.
+~~~
+kubectl get pods -l information or kubectl get pods --show-labels
+~~~
+6. Create 5 nginx pods in which two of them is labeled env=prod and three of them is
+labeled env=dev
+~~~
+kubectl run nginx1 --image=nginx --labels=env=dev
+kubectl run nginx2 --image=nginx --labels=env=dev
+kubectl run nginx3 --image=nginx --labels=env=dev
+kubectl run nginx4 --image=nginx --labels=env=prod
+kubectl run nginx5 --image=nginx --labels=env=prod
+~~~
+
+Verify all the pods are created with correct labels:
+~~~
+kubectl get pods --show-labels
+~~~
+
+Get the pods with label env=dev:
+~~~
+kubectl get pods -l env=dev
+~~~
+Get the pods with label env=dev and also output the labels:
+~~~
+kubectl get pods -l env=dev --show-labels
+~~~
+
+Get the pods with label env=prod:
+~~~
+kubectl get pods -l env=prod
+~~~
+
+Get the pods with label env=prod and also output the labels
+~~~
+kubectl get pods -l env=prod --show-labels
+~~~
+
+Get the pods with label env:
+~~~
+kubectl get pods -l env
+~~~
+
+Get the pods with labels env=dev and env=prod:
+~~~
+kubectl get pods -l env=dev,env=prod \didnt work
+~~~
+
+Get the pods with labels env=dev and env=prod and output the labels as well:
+~~~
+kubectl get pods -l env=dev,env=prod --show-labels
+~~~
+
+Change the label for one of the pod to env=uat and list all the pods to verify:
+~~~
+kubectl label pod/nginx1 env=uat --overwrite #Must to add --overwrite, if not we geting error.
+kubectl get pods --show-labels
+~~~
+
+Remove the labels for the pods that we created now and verify all the labels are
+removed:
+~~~
+kubectl label pod/nginx1 env-
+kubectl label pod/nginx2 env-
+kubectl label pod/nginx3 env-
+kubectl label pod/nginx4 env-
+kubectl label pod/nginx5 env-
+kubectl get pods --show-labels
+~~~
+
+Let’s add the label app=nginx for all the pods and verify (using kubectl):
+~~~
+kubectl label pod/nginx1 app=nginx
+kubectl label pod/nginx2 app=nginx
+kubectl label pod/nginx3 app=nginx
+kubectl label pod/nginx4 app=nginx
+kubectl label pod/nginx5 app=nginx
+kubectl get pods --show-labels
+~~~
+
+7. Get all the nodes with labels (if using minikube you would get only master node):
+~~~
+kubectl get nodes --show-labels
+~~~
+
+Label the worker node nodeName=nginxnode: (minikube):
+~~~
+kubectl label node minikube nodeName=nginxnode
+~~~
+
+8. Create a Pod that will be deployed on the worker node with the label
+nodeName=nginxnode:
+##### Code before add the nodeselector:
+~~~
+apiVersion: v1
+kind: Pod
+metadata:
+creationTimestamp: null
+labels:
+run: nginx
+name: nginx
+spec:
+containers:
+- image: nginx
+name: nginx
+resources: {}
+dnsPolicy: ClusterFirst
+restartPolicy: Never
+status: {}
+~~~
+
+Now we add the nodeSelector to yaml file and create the pod:
+~~~
+nodeSelector:
+    nodeName: nginxnode
+~~~
+
+~~~
+kubectl create -f 13-nodeselector.yml
+~~~
+
+Verify the pod that it is scheduled with the node selector on the right node… fix it if
+it’s not behind scheduled:
+~~~
+kubectl describe pod nginx
+~~~
+
+Verify the pod nginx that we just created has this label: (run=nginx)
+~~~
+kubectl get pods/nginx --show-labels
+~~~
+
+# Deployments:
+1. Create a deployment called webapp with image nginx with 5 replicas.
+- Use the below command to create a yaml file.
+~~~
+kubectl create deploy webapp --image=nginx --dry-run -o yaml > webapp.yaml
+~~~
+- Edit it and add 5 replica’s.
+
+After running the command above, We geting yaml file with 1 replica:
+~~~
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webapp
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+status: {}
+~~~
+
+Lets change the replicas to =5 and create the deployment:
+~~~
+replicas: 5
+kubectl apply -f webapp.yaml
+~~~
+
+2. Get the deployment rollout status:
+~~~
+kubectl rollout status deploy webapp
+~~~
+3. Get the replicaset that created with this deployment:
+First, we will find the replicaset name:
+~~~
+kubectl describe deploy
+~~~
+We find replicaset name: webapp-5654c984c
+~~~
+kubectl get replicaset webapp-5654c984c
+~~~
+
+4. EXPORT the yaml of the replicaset and pods of this deployment:
+YAML replicaset:
+~~~
+kubectl get replicaset webapp-5654c984c -o yaml
+~~~
+
+Pods YAML:
+~~~
+kubectl get pods -l app=webapp -o yaml
+~~~
+
+5. Delete the deployment you just created and watch all the pods are also being
+deleted:
+~~~
+kubectl delete deploy webapp
+~~~
+
+Verify the pods deleted:
+~~~
+kubectl get pods -l app=webapp
+~~~
+
+6. Create a deployment of webapp with image nginx:1.17.1 with container port 80 and
+verify the image version.
+- kubectl create deploy webapp --image=nginx:1.17.1 --dry-run -o yaml >
+webapp.yaml
+- add the port section (80) and create the deployment
+
+First we will run the command:
+~~~
+kubectl create deploy webapp --image=nginx:1.17.1 --dry-run -o yaml >
+webapp2.yaml
+~~~
+
+Lets add port 80 and update the pod:
+~~~
+ports:
+        - containerPort: 80
+~~~
+~~~
+kubectl apply -f webapp2.yaml
+~~~
+
+Verify the image version:
+~~~
+kubectl describe deploy/webapp
+~~~
+
+7. Update the deployment with the image version 1.17.4 and verify:
+~~~
+kubectl set image deploy/webapp nginx=nginx:1.17.4 --record
+kubectl describe deploy/webapp
+~~~
+8. Check the rollout history and make sure everything is ok after the update:
+~~~
+kubectl rollout history deploy/webapp
+kubectl describe pods/webapp-9cf988f87-cmvrx #Running
+~~~
+
+9. Undo the deployment to the previous version 1.17.1 and verify Image has the
+previous version:
+~~~
+kubectl rollout undo deploy/webapp
+kubectl describe deploy/webapp
+~~~
+
+10. Update the deployment with the wrong image version 1.100 and verify something is
+wrong with the deployment:
+- Expect: kubectl get pods (ImagePullErr)
+- Undo the deployment with the previous version and verify everything is Ok
+- kubectl rollout history deploy webapp --revision=7
+- Check the history of the specific revision of that deployment
+- update the deployment with the image version latest and check the history
+and verify nothing is going on
 
