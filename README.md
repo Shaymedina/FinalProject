@@ -323,34 +323,6 @@ spec:
       template:
 ~~~
 
-Full code:
-~~~
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: hello
-spec:
-  schedule: "*/1 * * * *"
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: hello
-            image: busybox
-            imagePullPolicy: IfNotPresent
-            command:
-            - /bin/sh
-            - -c
-            - date; echo Hello from the Kubernetes cluster
-          restartPolicy: OnFailure
-~~~
-
-Verify and geting status about the cronjob we created:
-~~~
-kubectl get cronjob hello
-~~~
-
 5. Type the command for: Get pods with label information.
 ~~~
 kubectl get pods -l information or kubectl get pods --show-labels
@@ -364,11 +336,13 @@ kubectl run nginx3 --image=nginx --labels=env=dev
 kubectl run nginx4 --image=nginx --labels=env=prod
 kubectl run nginx5 --image=nginx --labels=env=prod
 ~~~
+![Alt text](Screenshots/21.PNG?raw=true "Title")
 
 Verify all the pods are created with correct labels:
 ~~~
 kubectl get pods --show-labels
 ~~~
+![Alt text](Screenshots/22.PNG?raw=true "Title")
 
 Get the pods with label env=dev:
 ~~~
@@ -378,6 +352,7 @@ Get the pods with label env=dev and also output the labels:
 ~~~
 kubectl get pods -l env=dev --show-labels
 ~~~
+![Alt text](Screenshots/23.PNG?raw=true "Title")
 
 Get the pods with label env=prod:
 ~~~
@@ -409,6 +384,7 @@ Change the label for one of the pod to env=uat and list all the pods to verify:
 kubectl label pod/nginx1 env=uat --overwrite #Must to add --overwrite, if not we geting error.
 kubectl get pods --show-labels
 ~~~
+![Alt text](Screenshots/24.PNG?raw=true "Title")
 
 Remove the labels for the pods that we created now and verify all the labels are
 removed:
