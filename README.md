@@ -4,7 +4,7 @@ Deploy a pod named nginx-pod using the nginx:alpine image.
 ~~~
 kubectl run nginx-pod --image=nginx:alpine
 ~~~
-![Screenshot](Screenshots/1.png)
+![Alt text](Screenshots/1.PNG?raw=true "Title")
 # 2
 Deploy a messaging pos using the redis:alpine image with the labels set to 'tier=msg'.
 - Pod name: messaging
