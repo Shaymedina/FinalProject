@@ -348,11 +348,12 @@ Get the pods with label env=dev:
 ~~~
 kubectl get pods -l env=dev
 ~~~
+![Alt text](Screenshots/22.PNG?raw=true "Title")
+
 Get the pods with label env=dev and also output the labels:
 ~~~
 kubectl get pods -l env=dev --show-labels
 ~~~
-![Alt text](Screenshots/23.PNG?raw=true "Title")
 
 Get the pods with label env=prod:
 ~~~
@@ -368,6 +369,7 @@ Get the pods with label env:
 ~~~
 kubectl get pods -l env
 ~~~
+![Alt text](Screenshots/23.PNG?raw=true "Title")
 
 Get the pods with labels env=dev and env=prod:
 ~~~
@@ -396,6 +398,7 @@ kubectl label pod/nginx4 env-
 kubectl label pod/nginx5 env-
 kubectl get pods --show-labels
 ~~~
+![Alt text](Screenshots/25.PNG?raw=true "Title")
 
 Let’s add the label app=nginx for all the pods and verify (using kubectl):
 ~~~
@@ -406,16 +409,19 @@ kubectl label pod/nginx4 app=nginx
 kubectl label pod/nginx5 app=nginx
 kubectl get pods --show-labels
 ~~~
+![Alt text](Screenshots/26.PNG?raw=true "Title")
 
 7. Get all the nodes with labels (if using minikube you would get only master node):
 ~~~
 kubectl get nodes --show-labels
 ~~~
+![Alt text](Screenshots/27.PNG?raw=true "Title")
 
 Label the worker node nodeName=nginxnode: (minikube):
 ~~~
 kubectl label node minikube nodeName=nginxnode
 ~~~
+![Alt text](Screenshots/28.PNG?raw=true "Title")
 
 8. Create a Pod that will be deployed on the worker node with the label
 nodeName=nginxnode:
@@ -451,8 +457,10 @@ kubectl create -f 13-nodeselector.yml
 Verify the pod that it is scheduled with the node selector on the right node… fix it if
 it’s not behind scheduled:
 ~~~
-kubectl describe pod nginx
+kubectl describe pod/nginx
 ~~~
+
+![Alt text](Screenshots/29.PNG?raw=true "Title")
 
 Verify the pod nginx that we just created has this label: (run=nginx)
 ~~~
@@ -500,11 +508,15 @@ Lets change the replicas to =5 and create the deployment:
 replicas: 5
 kubectl apply -f webapp.yaml
 ~~~
+![Alt text](Screenshots/30.PNG?raw=true "Title")
 
 2. Get the deployment rollout status:
 ~~~
 kubectl rollout status deploy webapp
 ~~~
+
+![Alt text](Screenshots/31.PNG?raw=true "Title")
+
 3. Get the replicaset that created with this deployment:
 First, we will find the replicaset name:
 ~~~
@@ -514,6 +526,7 @@ We find replicaset name: webapp-5654c984c
 ~~~
 kubectl get replicaset webapp-5654c984c
 ~~~
+![Alt text](Screenshots/32.PNG?raw=true "Title")
 
 4. EXPORT the yaml of the replicaset and pods of this deployment:
 YAML replicaset:
@@ -536,6 +549,7 @@ Verify the pods deleted:
 ~~~
 kubectl get pods -l app=webapp
 ~~~
+![Alt text](Screenshots/33.PNG?raw=true "Title")
 
 6. Create a deployment of webapp with image nginx:1.17.1 with container port 80 and
 verify the image version.
@@ -563,16 +577,21 @@ Verify the image version:
 kubectl describe deploy/webapp
 ~~~
 
+![Alt text](Screenshots/34.PNG?raw=true "Title")
+
 7. Update the deployment with the image version 1.17.4 and verify:
 ~~~
 kubectl set image deploy/webapp nginx=nginx:1.17.4 --record
 kubectl describe deploy/webapp
 ~~~
+![Alt text](Screenshots/35.PNG?raw=true "Title")
+
 8. Check the rollout history and make sure everything is ok after the update:
 ~~~
 kubectl rollout history deploy/webapp
 kubectl describe pods/webapp-9cf988f87-cmvrx #Running
 ~~~
+![Alt text](Screenshots/36.PNG?raw=true "Title")
 
 9. Undo the deployment to the previous version 1.17.1 and verify Image has the
 previous version:
@@ -580,6 +599,7 @@ previous version:
 kubectl rollout undo deploy/webapp
 kubectl describe deploy/webapp
 ~~~
+![Alt text](Screenshots/37.PNG?raw=true "Title")
 
 10. Update the deployment with the wrong image version 1.100 and verify something is
 wrong with the deployment:
@@ -594,12 +614,15 @@ and verify nothing is going on
 kubectl set image deploy/webapp nginx=nginx:1.100 #Get error.
 kubectl get pods (ImagePullErr)
 ~~~
+![Alt text](Screenshots/38.PNG?raw=true "Title")
+
 Undo the deploy and back to previous version:
 ~~~
 kubectl rollout undo deploy/webapp
 kubectl get pods
 kubectl describe pods/webapp-b7889ff56-hxssb
 ~~~
+![Alt text](Screenshots/39.PNG?raw=true "Title")
 
 Check the history of the specific revision of that deployment: (Revision=3 in our case)
 ~~~
@@ -613,6 +636,9 @@ kubectl set image deploy/webapp nginx=nginx:latest --record
 kubectl rollout history deploy/webapp
 kubectl describe pods/webapp-6b9d4c7497-jv7k7
 ~~~
+![Alt text](Screenshots/40.PNG?raw=true "Title") 
+
+![Alt text](Screenshots/41.PNG?raw=true "Title") 
 
 11. Apply the autoscaling to this deployment with minimum 10 and maximum 20 replicas
 and target CPU of 85% and verify hpa is created and replicas are increased to 10
@@ -623,12 +649,14 @@ kubectl autoscale deploy/webapp --min=10 --max=20 --cpu-percent=85
 kubectl describe hpa
 kubectl describe deploy/webapp
 ~~~
+![Alt text](Screenshots/42.PNG?raw=true "Title")
 
 12. Clean the cluster by deleting deployment and hpa you just created:
 ~~~
 kubectl delete deploy/webapp
 kubectl delete hpa/webapp
 ~~~
+![Alt text](Screenshots/43.PNG?raw=true "Title")
 
 13. Create a job and make it run 10 times one after one (run > exit > run >exit ..) using the following configuration:
 ~~~
@@ -673,6 +701,7 @@ Verify:
 ~~~
 kubectl get job -watch
 ~~~
+![Alt text](Screenshots/44.PNG?raw=true "Title")
 
 # Config Map:
 - Create a file called config.txt with two values key1=value1 and key2=value2 and
