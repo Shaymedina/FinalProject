@@ -10,6 +10,7 @@ Deploy a messaging pos using the redis:alpine image with the labels set to 'tier
 - Pod name: messaging
 - Image: redis:alpine
 - Labels: tier=msg
+![Alt text](Screenshots/2.PNG?raw=true "Title")
 ~~~
 kubectl create -f 2-redispod.yml
 ~~~
@@ -18,11 +19,13 @@ Create a namespace named apx-998-yourname
 ~~~
 kubectl create namespace apx-998-shay
 ~~~
+![Alt text](Screenshots/3.PNG?raw=true "Title")
 # 4 
-Get list of nodes in JSOM format and store it in a file at /tmp/nodes-yourname/
+Get list of nodes in JSOM format and store it in a file at /tmp/nodes-yourname/ (minikube)
 ~~~
 kubectl get nodes -o=jsonpath='{.items[0].metadata.name}' > /tmp/nodes-shay/nodes.json
 ~~~
+![Alt text](Screenshots/4.PNG?raw=true "Title")
 # 5
 Create a service messaging-service to expose the messaging application within the cluster on port 6379.
 - Use imperative commands - kubectl.
@@ -37,6 +40,8 @@ Or:
 ~~~
 kubectl create service clusterip messaging-service --tcp=6379
 ~~~
+![Alt text](Screenshots/5.PNG?raw=true "Title")
+![Alt text](Screenshots/6.PNG?raw=true "Title")
 # 6
 Create a deployment named hr-web-app using image kodekloud/webapp-color with 2 replicas.
 - Name: hr-web-app
@@ -45,6 +50,7 @@ Create a deployment named hr-web-app using image kodekloud/webapp-color with 2 r
 ~~~
 kubectl apply -f 4-deployment-hr.yml
 ~~~
+![Alt text](Screenshots/7.PNG?raw=true "Title")
 # 7
 Create a static pod named static-busybox on the msater node that uses the busybox image and the command sleep 1000
 1. Locate the kubelet config file by this command:
@@ -81,6 +87,9 @@ sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 kubectl get pods
 ~~~
+![Alt text](Screenshots/8.PNG?raw=true "Title")
+
+![Alt text](Screenshots/9.PNG?raw=true "Title")
 # 8
 Create a pod in the finance-yourname namespace named temp-bus with the image redis:alpine
 - Name: temp-bus
@@ -97,6 +106,9 @@ kubectl apply -f 6-podnamespace.yml
 ~~~
 kubectl get pods --namespace=finance-shay
 ~~~
+![Alt text](Screenshots/10.PNG?raw=true "Title")
+
+![Alt text](Screenshots/11.PNG?raw=true "Title")
 # 9
 Create a Persistent Volume with the given specification:
 - Volume Name: pv-analytics
@@ -105,12 +117,15 @@ Create a Persistent Volume with the given specification:
 - Host Path: /pv/data-analytics
 1. PV creation:
 ~~~
-kubectl apply -f 7-persistentvolume
+kubectl apply -f 7-persistentvolume.yml
 ~~~
 2. View Information:
 ~~~
 kubectl get pv pv-analytics
 ~~~
+![Alt text](Screenshots/12.PNG?raw=true "Title")
+
+![Alt text](Screenshots/13.PNG?raw=true "Title")
 # 10
 Create a Pod called redis-storage-yourname with image: redis:alpine with a Volume of type emptyDir that lasts for the life of the Pod:
 - Pod named 'redis-storage-yourname'
@@ -124,6 +139,7 @@ kubectl apply -f 8-storage.yml
 ~~~
 kubectl get pod redis-storage-shay
 ~~~
+![Alt text](Screenshots/14.PNG?raw=true "Title")
 # 11
 Create this pod and attached it a persistent volume called pv-1.
 - Make sure the PV mountPath is hostbase : /data
@@ -161,6 +177,7 @@ kubectl apply -f 10-storage3.yml
 kubectl get pod use-pvspec-shay
 kubectl describe pod/use-pvspec-shay
 ~~~
+![Alt text](Screenshots/15.PNG?raw=true "Title")
 # 12
 Create a new deployment called nginx-deploy, with image nginx:1.16 and 1 replica.
 Record the version. Next upgrade the deployment to version 1.17 using rolling
@@ -186,6 +203,10 @@ kubectl set image deployment nginx-deploy nginx=nginx:1.17 --record
 kubectl rollout history deployment nginx-deploy
 kubectl describe deploy/nginx-deploy
 ~~~
+![Alt text](Screenshots/16.PNG?raw=true "Title")
+
+![Alt text](Screenshots/17.PNG?raw=true "Title")
+
 # 13
 Create an nginx pod called nginx-resolver using image nginx, expose it internally
 with a service called nginx-resolver-service. Test that you are able to look up the service and pod names from within the cluster. Use the image: busybox:1.28 for dnslookup. Record results in /root/nginx-yourname.svc and /root/nginx-yourname.pod.
@@ -201,6 +222,9 @@ kubectl expose pod/nginx-resolver --port=80 --type=ClusterIP --name=nginx-resolv
 ~~~
 kubectl describe svc/nginx-resolver-service
 ~~~
+
+![Alt text](Screenshots/18.PNG?raw=true "Title")
+
 4. Create pod named dns with image busybox:1.28 that record the dns route's and save the results in /root/nginx-yourname.svc and /root/nginx-yourname.pod
 ~~~
 kubectl run dns --image=busybox:1.28 --rm -it -- sleep 3600 -- nslookup nginx-resolver-service > /root/nginx-shay.svc
@@ -226,6 +250,9 @@ spec:
     image: nginx
 EOF
 ~~~
+~~~
+sudo systemctl restart kubelet
+~~~
 2. Try to delete the POD:
 ~~~
 kubectl delete pod nginx-critical
@@ -234,6 +261,9 @@ kubectl delete pod nginx-critical
 ~~~
 kubectl get pods
 ~~~
+
+![Alt text](Screenshots/19.PNG?raw=true "Title")
+
 # 15
 Create a pod called multi-pod with two containers.
 - Container 1- name: alpha, image: nginx
@@ -251,8 +281,10 @@ kubectl apply -f 12-multipod.yml
 ~~~
 kubectl describe pod/multi-pod
 ~~~
+![Alt text](Screenshots/20.PNG?raw=true "Title")
+
 # Pod Design Questions:
-1. Understand how to use Labels, Selectors and Annotations: 
+1. Understand how to use Labels, Selectors and Annotations:   
 Label its a way to tag a pod or any resource in the kubernetes system, Example: im created pod with 5 containers, I want that three of them expose out, so i give them a label and expose the label name only, After that the "labeled" containers exposes out. Labels its like group.
 Selector are Same as Labels but with Selectors we can attached pod to specific node.
 Annotations are provide a extra information to metadata like image information, tool info', release ID.
