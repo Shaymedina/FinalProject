@@ -288,13 +288,13 @@ kubectl describe pod/multi-pod
 Label its a way to tag a pod or any resource in the kubernetes system, Example: im created pod with 5 containers, I want that three of them expose out, so i give them a label and expose the label name only, After that the "labeled" containers exposes out. Labels its like group.
 Selector are Same as Labels but with Selectors we can attached pod to specific node.
 Annotations are provide a extra information to metadata like image information, tool info', release ID.
-2. Understand Deployments and how to perform rolling updates
+2. Understand Deployments and how to perform rolling updates  
 Deployment its a way to deploy pods, replicas, rolling updates. Deployment controller changes the desires state to the actual one. In Addition, we can use Deployment to rollback updates, scale up pods, cleanup replicas and more.
 We perform rolling updates by command:
 ~~~
 kubectl set image deployment/nginx-deployment nginx=nginx:1.14 --record
 ~~~
-3. Understand Deployments and how to perform rollbacks
+3. Understand Deployments and how to perform rollbacks  
 We using rollback when the Deployment not stable or crash, we do it with the command:
 ~~~
 kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.13 --record=true
@@ -307,7 +307,7 @@ the output will be:
 ~~~
 deployment.apps/nginx-deployment rolled back
 ~~~
-4. Understand Jobs and CronJobs
+4. Understand Jobs and CronJobs  
 Job its a way to create a pod with spesific mission, The job will not stop execution until the pod will terminate.
 CronJob are the same thing but with schedule option to specific time.
 How to create a CronJob?  we can perform CronJob with yaml and command. Example's:
