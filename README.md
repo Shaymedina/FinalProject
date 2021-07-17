@@ -695,13 +695,11 @@ keyvalcfgmap and exec into the pod and verify the environment variables and dele
 the pod.
 - first run this command to save the pod yml
 ~~~
-
-
+kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx-shay-test.yml
 ~~~
- We running the commad above and got yaml format:
-
- ~~~
- apiVersion: v1
+We running the commad above and got yaml format:
+~~~
+apiVersion: v1
 kind: Pod
 metadata:
   creationTimestamp: null
@@ -717,6 +715,7 @@ spec:
   restartPolicy: Never
 status: {}
 ~~~
+
  
 We will set configmap in the yaml file:
 
@@ -729,4 +728,12 @@ envFrom:
 Updating the pod config:
 ~~~
 kubectl apply -f nginx-shay-test.yml
+~~~
+Exec to the pod and verify the environment variables:
+~~~
+kubectl exec -it nginx -- env
+~~~
+Delete the pod:
+~~~
+kubectl delete pods/nginx
 ~~~
