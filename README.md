@@ -251,7 +251,7 @@ kubectl apply -f 12-multipod.yml
 kubectl describe pod/multi-pod
 ~~~
 # Pod Design Questions:
-1. Understand how to use Labels, Selectors and Annotations:
+1. Understand how to use Labels, Selectors and Annotations: /n
 Label its a way to tag a pod or any resource in the kubernetes system, Example: im created pod with 5 containers, I want that three of them expose out, so i give them a label and expose the label name only, After that the "labeled" containers exposes out. Labels its like group.
 Selector are Same as Labels but with Selectors we can attached pod to specific node.
 Annotations are provide a extra information to metadata like image information, tool info', release ID.
