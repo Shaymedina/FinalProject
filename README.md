@@ -5,6 +5,8 @@ Deploy a pod named nginx-pod using the nginx:alpine image.
 kubectl run nginx-pod --image=nginx:alpine
 ~~~
 ![Alt text](Screenshots/1.PNG?raw=true "Title")
+
+![Alt text](Screenshots/45.PNG?raw=true "Title")
 # 2
 Deploy a messaging pos using the redis:alpine image with the labels set to 'tier=msg'.
 - Pod name: messaging
@@ -51,6 +53,8 @@ Create a deployment named hr-web-app using image kodekloud/webapp-color with 2 r
 kubectl apply -f 4-deployment-hr.yml
 ~~~
 ![Alt text](Screenshots/7.PNG?raw=true "Title")
+
+![Alt text](Screenshots/46.PNG?raw=true "Title")
 # 7
 Create a static pod named static-busybox on the msater node that uses the busybox image and the command sleep 1000
 1. Locate the kubelet config file by this command:
@@ -140,6 +144,8 @@ kubectl apply -f 8-storage.yml
 kubectl get pod redis-storage-shay
 ~~~
 ![Alt text](Screenshots/14.PNG?raw=true "Title")
+
+![Alt text](Screenshots/47.PNG?raw=true "Title")
 # 11
 Create this pod and attached it a persistent volume called pv-1.
 - Make sure the PV mountPath is hostbase : /data
@@ -178,6 +184,8 @@ kubectl get pod use-pvspec-shay
 kubectl describe pod/use-pvspec-shay
 ~~~
 ![Alt text](Screenshots/15.PNG?raw=true "Title")
+
+![Alt text](Screenshots/48.PNG?raw=true "Title")
 # 12
 Create a new deployment called nginx-deploy, with image nginx:1.16 and 1 replica.
 Record the version. Next upgrade the deployment to version 1.17 using rolling
@@ -225,10 +233,12 @@ kubectl describe svc/nginx-resolver-service
 
 ![Alt text](Screenshots/18.PNG?raw=true "Title")
 
-4. Create pod named dns with image busybox:1.28 that record the dns route's and save the results in /root/nginx-yourname.svc and /root/nginx-yourname.pod
+4. Create pod named dns with image busybox:1.28 that record the dns route's and save the results in /root/nginx-yourname.svc and /root/nginx-yourname.pod - ##No Permmision on root directory. 
 ~~~
-kubectl run dns --image=busybox:1.28 --rm -it -- sleep 3600 -- nslookup nginx-resolver-service > /root/nginx-shay.svc
+kubectl run dns --image=busybox:1.28 -it --restart=Never -- nslookup nginx-resolver-service > nginx-shaymedina.svc 
 ~~~
+"--restart=Never" must in busybox image.
+![Alt text](Screenshots/49.PNG?raw=true "Title")
 # 14
 Create a static pod on node01 called nginx-critical with image nginx. Create this pod
 on node01 and make sure that it is recreated/restarted automatically in case of a
@@ -342,7 +352,6 @@ Verify all the pods are created with correct labels:
 ~~~
 kubectl get pods --show-labels
 ~~~
-![Alt text](Screenshots/22.PNG?raw=true "Title")
 
 Get the pods with label env=dev:
 ~~~
@@ -771,7 +780,13 @@ Exec to the pod and verify the environment variables:
 ~~~
 kubectl exec -it nginx -- env
 ~~~
+
+![Alt text](Screenshots/50.PNG?raw=true "Title")
+
 Delete the pod:
 ~~~
 kubectl delete pods/nginx
 ~~~
+![Alt text](Screenshots/51.PNG?raw=true "Title")
+
+##### Thanks you Shay!!
