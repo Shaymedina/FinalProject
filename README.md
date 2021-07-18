@@ -237,7 +237,9 @@ kubectl describe svc/nginx-resolver-service
 ~~~
 kubectl run dns --image=busybox:1.28 -it --restart=Never -- nslookup nginx-resolver-service > nginx-shaymedina.svc 
 ~~~
+
 "--restart=Never" must in busybox image.
+
 ![Alt text](Screenshots/49.PNG?raw=true "Title")
 # 14
 Create a static pod on node01 called nginx-critical with image nginx. Create this pod
